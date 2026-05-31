@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>智策中心</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">✦</div>
+        <div>
+          <h1>智策中心</h1>
+          <p>Vincent AI Command Center</p>
+        </div>
+      </div>
+
+      <nav>
+        <button class="active">主頁</button>
+        <button>歷史對話</button>
+        <button>我的檔案</button>
+        <button>常用組合</button>
+        <button>AI 圖像魔術師</button>
+        <button>Agent 管理</button>
+        <button>設定</button>
+      </nav>
+
+      <div class="user">
+        <div class="avatar">V</div>
+        <div>
+          <strong>Vincent</strong>
+          <span>Pro</span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header>
+        <div>
+          <h2>你好，Vincent 👋</h2>
+          <p>直接輸入你的想法、問題、貼上內容或拖曳檔案，AI 會協助你完成最佳結果。</p>
+        </div>
+        <button class="quick">快速組合</button>
+      </header>
+
+      <section class="conversation" id="conversation">
+        <div class="message user-message">
+          <div class="bubble">
+            <strong>你</strong>
+            <p>請輸入任務後開始執行。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="composer">
+        <textarea id="question" placeholder="請輸入你的想法、問題、貼上內容或拖曳檔案..."></textarea>
+        <div class="composer-actions">
+          <button>附件</button>
+          <button>圖片</button>
+          <button>語音</button>
+          <button id="send" class="send">開始執行</button>
+        </div>
+      </section>
+    </main>
+
+    <aside class="control">
+      <section class="panel">
+        <h3>主控 AI</h3>
+        <div class="grid">
+          <label class="card selected"><input type="radio" name="controller" value="chatgpt" checked />ChatGPT</label>
+          <label class="card"><input type="radio" name="controller" value="gemini" />Gemini</label>
+          <label class="card"><input type="radio" name="controller" value="deepseek" />DeepSeek</label>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h3>參與 AI</h3>
+        <label><input type="checkbox" value="gemini" checked /> Gemini</label>
+        <label><input type="checkbox" value="deepseek" checked /> DeepSeek</label>
+      </section>
+
+      <section class="panel">
+        <h3>研究等級</h3>
+        <label><input type="radio" name="research" value="fast" /> 快速模式</label>
+        <label><input type="radio" name="research" value="standard" checked /> 標準模式</label>
+        <label><input type="radio" name="research" value="deep" /> 深度研究</label>
+      </section>
+
+      <section class="panel">
+        <h3>輸出模式</h3>
+        <label><input type="radio" name="output" checked /> 主控整合</label>
+        <label><input type="radio" name="output" /> 顯示全部答案</label>
+        <label><input type="radio" name="output" /> 顯示比較表</label>
+        <label><input type="radio" name="output" /> AI 評分</label>
+      </section>
+    </aside>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
