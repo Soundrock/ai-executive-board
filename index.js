@@ -4,6 +4,8 @@ import { askOpenAI } from "./agents/openai.js";
 import { askGemini } from "./agents/gemini.js";
 import { askDeepSeek } from "./agents/deepseek.js";
 import { judgeAnswers } from "./judge.js";
+import fs from "fs";
+import path from "path";
 
 console.log("\nVincent AI Command Center v1");
 console.log("請輸入你的問題，系統會同時詢問 OpenAI、Gemini、DeepSeek。\n");
@@ -42,3 +44,39 @@ console.log("最終總評");
 console.log("================================");
 console.log(finalJudgement);
 console.log("================================\n");
+
+const logsDir = path.join(process.cwd(), "logs");
+if (!fs.existsSync(logsDir)) {
+  fs.mkdirSync(logsDir);
+}
+
+const now = new Date();
+const timestamp = now.toISOString().replace(/[:.]/g, "-");
+const logFile = path.join(logsDir, `${timestamp}.md`);
+
+const logContent = `# Vincent AI Command Center Log
+
+時間：${now.toLocaleString("zh-TW")}
+
+## 使用者問題
+
+${question}
+
+## AI 回答
+
+${results.map((result) => `### ${result.agent}
+
+狀態：${result.ok ? "成功" : "失敗"}
+
+${result.answer}
+`).join("\n")}
+
+## 最終總評
+
+${finalJudgement}
+`;
+
+fs.writeFileSync(logFile, logContent, "utf8");
+
+console.log(`本次紀錄已儲存：${logFile}`);
+
