@@ -1,0 +1,16 @@
+{
+  "name": "vincent-ai-command-center",
+  "version": "1.0.0",
+  "description": "Vincent Multi-Agent AI Command Center v1",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@google/genai": "^1.0.0",
+    "dotenv": "^16.4.5",
+    "openai": "^4.70.0",
+    "readline-sync": "^1.4.10"
+  }
+}
