@@ -1,0 +1,178 @@
+[
+  {
+    "projectKey": "erp",
+    "projectName": "導覽機租賃 ERP",
+    "repo": "Soundrock/tour-guide-rental-erp",
+    "private": true,
+    "defaultBranch": "main",
+    "language": "HTML",
+    "updatedAt": "2026-05-27T07:11:18Z",
+    "branchCount": 6,
+    "branches": [
+      "dev",
+      "finance-safe-v0402",
+      "fix/reminder-center-filter",
+      "main",
+      "restore-v039-test",
+      "stable-v0392-sidebar"
+    ],
+    "latestCommits": [
+      {
+        "sha": "26d3d20",
+        "message": "Clean backup files and update gitignore",
+        "date": "2026-05-27T06:56:10Z"
+      },
+      {
+        "sha": "4098743",
+        "message": "Initial working ERP version",
+        "date": "2026-05-27T06:49:26Z"
+      }
+    ],
+    "techStack": {
+      "electron": true,
+      "node": true,
+      "html": true,
+      "css": false,
+      "javascript": true,
+      "images": 0,
+      "docs": 0
+    },
+    "health": {
+      "totalFiles": 6,
+      "archiveFiles": 0,
+      "zipFiles": 0,
+      "diffFiles": 0,
+      "dsStoreFiles": 0,
+      "packageFiles": 1,
+      "readmeFiles": 0
+    },
+    "recommendations": [
+      "建議補 README，方便 AI 與人員快速理解專案。",
+      "Electron 專案建議保留 main.js、package.json、核心 HTML/CSS/JS 作為主要分析入口。"
+    ],
+    "importantFiles": [
+      "Rental ERP Mac App/index.html",
+      "Rental ERP Mac App/main.js",
+      "Rental ERP Mac App/package.json"
+    ]
+  },
+  {
+    "projectKey": "image",
+    "projectName": "AI 圖像魔術師",
+    "repo": "Soundrock/ai-image-magician",
+    "private": true,
+    "defaultBranch": "main",
+    "language": "JavaScript",
+    "updatedAt": "2026-05-29T18:12:45Z",
+    "branchCount": 2,
+    "branches": [
+      "develop",
+      "main"
+    ],
+    "latestCommits": [
+      {
+        "sha": "cae7c5b",
+        "message": "Initial project structure and UI references",
+        "date": "2026-05-29T18:12:37Z"
+      }
+    ],
+    "techStack": {
+      "electron": false,
+      "node": false,
+      "html": true,
+      "css": true,
+      "javascript": true,
+      "images": 56,
+      "docs": 15
+    },
+    "health": {
+      "totalFiles": 129,
+      "archiveFiles": 35,
+      "zipFiles": 4,
+      "diffFiles": 7,
+      "dsStoreFiles": 4,
+      "packageFiles": 0,
+      "readmeFiles": 6
+    },
+    "recommendations": [
+      "移除 .DS_Store，避免無意義檔案污染 Repo。",
+      "ZIP 檔建議移到 Release 或外部備份，不建議長期放在 Repo。",
+      "DIFF 檔建議整理到 review/archive 文件，不建議混在主 Repo。",
+      "Archive 檔案偏多，建議建立清理計畫，避免 AI 分析時混淆版本。"
+    ],
+    "importantFiles": [
+      "00-app/legacy-v1.2/PROJECT-CONTEXT.md",
+      "00-app/legacy-v1.2/README.md",
+      "00-app/legacy-v1.2/app.js",
+      "00-app/legacy-v1.2/index.html",
+      "01-docs/DEVELOPMENT-RULES.md",
+      "01-docs/PROJECT-CONTEXT.md",
+      "Archive/AI-Image-Magician-v1.2-Stability-Reviewed 2/PROJECT-CONTEXT.md",
+      "Archive/AI-Image-Magician-v1.2-Stability-Reviewed 2/README.md",
+      "Archive/AI-Image-Magician-v1.2-Stability-Reviewed 2/app.js",
+      "Archive/AI-Image-Magician-v1.2-Stability-Reviewed 2/index.html",
+      "Archive/AI-Image-Magician-v1.2-Stability-Reviewed/PROJECT-CONTEXT.md",
+      "Archive/AI-Image-Magician-v1.2-Stability-Reviewed/README.md",
+      "Archive/AI-Image-Magician-v1.2-Stability-Reviewed/app.js",
+      "Archive/AI-Image-Magician-v1.2-Stability-Reviewed/index.html",
+      "ChatGPT-Review/AI-Image-Magician-v1.2.1-Hotfix-Restore-UI/PROJECT-CONTEXT.md",
+      "ChatGPT-Review/AI-Image-Magician-v1.2.1-Hotfix-Restore-UI/README.md",
+      "ChatGPT-Review/AI-Image-Magician-v1.2.1-Hotfix-Restore-UI/app.js",
+      "ChatGPT-Review/AI-Image-Magician-v1.2.1-Hotfix-Restore-UI/index.html",
+      "ChatGPT-Review/AI-Image-Magician-v1.2.2-Interaction-Hotfix 2/PROJECT-CONTEXT.md",
+      "ChatGPT-Review/AI-Image-Magician-v1.2.2-Interaction-Hotfix 2/README.md",
+      "ChatGPT-Review/AI-Image-Magician-v1.2.2-Interaction-Hotfix 2/app.js",
+      "ChatGPT-Review/AI-Image-Magician-v1.2.2-Interaction-Hotfix 2/index.html",
+      "ChatGPT-Review/AI-Image-Magician-v1.2.2-Interaction-Hotfix/PROJECT-CONTEXT.md",
+      "ChatGPT-Review/AI-Image-Magician-v1.2.2-Interaction-Hotfix/README.md",
+      "ChatGPT-Review/AI-Image-Magician-v1.2.2-Interaction-Hotfix/app.js",
+      "ChatGPT-Review/AI-Image-Magician-v1.2.2-Interaction-Hotfix/index.html"
+    ]
+  },
+  {
+    "projectKey": "command",
+    "projectName": "智策中心",
+    "repo": "Soundrock/vincent-ai-command-center",
+    "private": true,
+    "defaultBranch": "main",
+    "language": "JavaScript",
+    "updatedAt": "2026-05-31T01:45:37Z",
+    "branchCount": 2,
+    "branches": [
+      "main",
+      "v0.3-agent-router-architecture"
+    ],
+    "latestCommits": [
+      {
+        "sha": "62f405c",
+        "message": "v0.1 OpenAI and Gemini multi-agent CLI",
+        "date": "2026-05-31T01:39:51Z"
+      }
+    ],
+    "techStack": {
+      "electron": false,
+      "node": true,
+      "html": false,
+      "css": false,
+      "javascript": true,
+      "images": 0,
+      "docs": 1
+    },
+    "health": {
+      "totalFiles": 11,
+      "archiveFiles": 0,
+      "zipFiles": 0,
+      "diffFiles": 0,
+      "dsStoreFiles": 0,
+      "packageFiles": 1,
+      "readmeFiles": 1
+    },
+    "recommendations": [
+      "目前未發現明顯結構問題。"
+    ],
+    "importantFiles": [
+      "README.md",
+      "package.json"
+    ]
+  }
+]

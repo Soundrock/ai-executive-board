@@ -1,0 +1,46 @@
+{
+  "projectKey": "command",
+  "projectName": "智策中心",
+  "repo": "Soundrock/vincent-ai-command-center",
+  "private": true,
+  "defaultBranch": "main",
+  "language": "JavaScript",
+  "updatedAt": "2026-05-31T01:45:37Z",
+  "branchCount": 2,
+  "branches": [
+    "main",
+    "v0.3-agent-router-architecture"
+  ],
+  "latestCommits": [
+    {
+      "sha": "62f405c",
+      "message": "v0.1 OpenAI and Gemini multi-agent CLI",
+      "date": "2026-05-31T01:39:51Z"
+    }
+  ],
+  "techStack": {
+    "electron": false,
+    "node": true,
+    "html": false,
+    "css": false,
+    "javascript": true,
+    "images": 0,
+    "docs": 1
+  },
+  "health": {
+    "totalFiles": 11,
+    "archiveFiles": 0,
+    "zipFiles": 0,
+    "diffFiles": 0,
+    "dsStoreFiles": 0,
+    "packageFiles": 1,
+    "readmeFiles": 1
+  },
+  "recommendations": [
+    "目前未發現明顯結構問題。"
+  ],
+  "importantFiles": [
+    "README.md",
+    "package.json"
+  ]
+}

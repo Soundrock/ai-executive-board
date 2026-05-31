@@ -1,0 +1,73 @@
+{
+  "projectKey": "image",
+  "projectName": "AI 圖像魔術師",
+  "repo": "Soundrock/ai-image-magician",
+  "private": true,
+  "defaultBranch": "main",
+  "language": "JavaScript",
+  "updatedAt": "2026-05-29T18:12:45Z",
+  "branchCount": 2,
+  "branches": [
+    "develop",
+    "main"
+  ],
+  "latestCommits": [
+    {
+      "sha": "cae7c5b",
+      "message": "Initial project structure and UI references",
+      "date": "2026-05-29T18:12:37Z"
+    }
+  ],
+  "techStack": {
+    "electron": false,
+    "node": false,
+    "html": true,
+    "css": true,
+    "javascript": true,
+    "images": 56,
+    "docs": 15
+  },
+  "health": {
+    "totalFiles": 129,
+    "archiveFiles": 35,
+    "zipFiles": 4,
+    "diffFiles": 7,
+    "dsStoreFiles": 4,
+    "packageFiles": 0,
+    "readmeFiles": 6
+  },
+  "recommendations": [
+    "移除 .DS_Store，避免無意義檔案污染 Repo。",
+    "ZIP 檔建議移到 Release 或外部備份，不建議長期放在 Repo。",
+    "DIFF 檔建議整理到 review/archive 文件，不建議混在主 Repo。",
+    "Archive 檔案偏多，建議建立清理計畫，避免 AI 分析時混淆版本。"
+  ],
+  "importantFiles": [
+    "00-app/legacy-v1.2/PROJECT-CONTEXT.md",
+    "00-app/legacy-v1.2/README.md",
+    "00-app/legacy-v1.2/app.js",
+    "00-app/legacy-v1.2/index.html",
+    "01-docs/DEVELOPMENT-RULES.md",
+    "01-docs/PROJECT-CONTEXT.md",
+    "Archive/AI-Image-Magician-v1.2-Stability-Reviewed 2/PROJECT-CONTEXT.md",
+    "Archive/AI-Image-Magician-v1.2-Stability-Reviewed 2/README.md",
+    "Archive/AI-Image-Magician-v1.2-Stability-Reviewed 2/app.js",
+    "Archive/AI-Image-Magician-v1.2-Stability-Reviewed 2/index.html",
+    "Archive/AI-Image-Magician-v1.2-Stability-Reviewed/PROJECT-CONTEXT.md",
+    "Archive/AI-Image-Magician-v1.2-Stability-Reviewed/README.md",
+    "Archive/AI-Image-Magician-v1.2-Stability-Reviewed/app.js",
+    "Archive/AI-Image-Magician-v1.2-Stability-Reviewed/index.html",
+    "ChatGPT-Review/AI-Image-Magician-v1.2.1-Hotfix-Restore-UI/PROJECT-CONTEXT.md",
+    "ChatGPT-Review/AI-Image-Magician-v1.2.1-Hotfix-Restore-UI/README.md",
+    "ChatGPT-Review/AI-Image-Magician-v1.2.1-Hotfix-Restore-UI/app.js",
+    "ChatGPT-Review/AI-Image-Magician-v1.2.1-Hotfix-Restore-UI/index.html",
+    "ChatGPT-Review/AI-Image-Magician-v1.2.2-Interaction-Hotfix 2/PROJECT-CONTEXT.md",
+    "ChatGPT-Review/AI-Image-Magician-v1.2.2-Interaction-Hotfix 2/README.md",
+    "ChatGPT-Review/AI-Image-Magician-v1.2.2-Interaction-Hotfix 2/app.js",
+    "ChatGPT-Review/AI-Image-Magician-v1.2.2-Interaction-Hotfix 2/index.html",
+    "ChatGPT-Review/AI-Image-Magician-v1.2.2-Interaction-Hotfix/PROJECT-CONTEXT.md",
+    "ChatGPT-Review/AI-Image-Magician-v1.2.2-Interaction-Hotfix/README.md",
+    "ChatGPT-Review/AI-Image-Magician-v1.2.2-Interaction-Hotfix/app.js",
+    "ChatGPT-Review/AI-Image-Magician-v1.2.2-Interaction-Hotfix/index.html"
+  ]
+}

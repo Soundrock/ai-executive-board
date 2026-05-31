@@ -1,0 +1,57 @@
+{
+  "projectKey": "erp",
+  "projectName": "導覽機租賃 ERP",
+  "repo": "Soundrock/tour-guide-rental-erp",
+  "private": true,
+  "defaultBranch": "main",
+  "language": "HTML",
+  "updatedAt": "2026-05-27T07:11:18Z",
+  "branchCount": 6,
+  "branches": [
+    "dev",
+    "finance-safe-v0402",
+    "fix/reminder-center-filter",
+    "main",
+    "restore-v039-test",
+    "stable-v0392-sidebar"
+  ],
+  "latestCommits": [
+    {
+      "sha": "26d3d20",
+      "message": "Clean backup files and update gitignore",
+      "date": "2026-05-27T06:56:10Z"
+    },
+    {
+      "sha": "4098743",
+      "message": "Initial working ERP version",
+      "date": "2026-05-27T06:49:26Z"
+    }
+  ],
+  "techStack": {
+    "electron": true,
+    "node": true,
+    "html": true,
+    "css": false,
+    "javascript": true,
+    "images": 0,
+    "docs": 0
+  },
+  "health": {
+    "totalFiles": 6,
+    "archiveFiles": 0,
+    "zipFiles": 0,
+    "diffFiles": 0,
+    "dsStoreFiles": 0,
+    "packageFiles": 1,
+    "readmeFiles": 0
+  },
+  "recommendations": [
+    "建議補 README，方便 AI 與人員快速理解專案。",
+    "Electron 專案建議保留 main.js、package.json、核心 HTML/CSS/JS 作為主要分析入口。"
+  ],
+  "importantFiles": [
+    "Rental ERP Mac App/index.html",
+    "Rental ERP Mac App/main.js",
+    "Rental ERP Mac App/package.json"
+  ]
+}
