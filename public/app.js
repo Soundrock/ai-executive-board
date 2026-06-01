@@ -22,19 +22,25 @@ function escapeHtml(text) {
   }[char]));
 }
 
-function extractAnswer(output) {
-  try {
-    const match = output.match(/\{[\s\S]*\}$/);
-    if (!match) return output;
+function renderMeta(data) {
+  const source = data.source || "未知";
+  const mode = data.mode || data.intent || "未知";
+  return `<div class="answer-meta">來源：${escapeHtml(source)}｜模式：${escapeHtml(mode)}</div>`;
+}
 
-    const data = JSON.parse(match[0]);
+function renderAiStatus(aiStatus = {}) {
+  const items = Object.entries(aiStatus).map(([id, ai]) => {
+    const cls = ai.connected ? "online" : "offline";
+    const label = ai.connected ? "已連線" : "未連線";
+    return `<div class="ai-status-row" data-ai="${id}">
+      <span class="status-dot ${cls}"></span>
+      <span>${escapeHtml(ai.name)}</span>
+      <small>${label}</small>
+    </div>`;
+  }).join("");
 
-    if (data.final) return data.final;
-    if (data.outputFile) return `任務已完成，報告已儲存：${data.outputFile}`;
-    return JSON.stringify(data, null, 2);
-  } catch {
-    return output;
-  }
+  const target = document.getElementById("ai-status-box");
+  if (target) target.innerHTML = items;
 }
 
 async function getBrowserLocation() {
@@ -53,6 +59,17 @@ async function getBrowserLocation() {
       { enableHighAccuracy: false, timeout: 5000, maximumAge: 600000 }
     );
   });
+}
+
+async function refreshAiStatus() {
+  try {
+    const response = await fetch("/api/ai-status");
+    const data = await response.json();
+    if (data.ok) renderAiStatus(data.aiStatus);
+  } catch {
+    const target = document.getElementById("ai-status-box");
+    if (target) target.innerHTML = "AI 狀態讀取失敗";
+  }
 }
 
 async function runTask() {
@@ -80,8 +97,10 @@ async function runTask() {
     if (!data.ok) throw new Error(data.error);
 
     loading.remove();
-    const answer = data.answer || extractAnswer(data.output);
-    addMessage("ai", `<strong>任務完成</strong><pre>${escapeHtml(answer)}</pre>`);
+    if (data.aiStatus) renderAiStatus(data.aiStatus);
+
+    const answer = data.answer || data.output || "沒有取得答案";
+    addMessage("ai", `<strong>任務完成</strong>${renderMeta(data)}<pre>${escapeHtml(answer)}</pre>`);
   } catch (error) {
     loading.remove();
     addMessage("ai", `<strong>錯誤</strong><p>${escapeHtml(error.message)}</p>`);
@@ -95,7 +114,7 @@ async function showLatestReport() {
     const response = await fetch("/api/latest-report");
     const data = await response.json();
     if (!data.ok) throw new Error(data.error);
-    addMessage("ai", `<strong>最新報告</strong><pre>${escapeHtml(extractAnswer(data.output))}</pre>`);
+    addMessage("ai", `<strong>最新報告</strong><pre>${escapeHtml(data.output)}</pre>`);
   } catch (error) {
     addMessage("ai", `<strong>錯誤</strong><p>${escapeHtml(error.message)}</p>`);
   }
@@ -132,3 +151,6 @@ healthButton.addEventListener("click", runHealthCheck);
 
 document.querySelector(".composer-actions").insertBefore(latestButton, sendButton);
 document.querySelector(".composer-actions").insertBefore(healthButton, sendButton);
+
+refreshAiStatus();
+setInterval(refreshAiStatus, 30000);

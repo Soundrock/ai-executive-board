@@ -252,3 +252,38 @@ button.send {
   display: block;
   margin: 10px 0;
 }
+
+.answer-meta {
+  margin: 8px 0 12px;
+  color: #667085;
+  font-size: 13px;
+}
+
+.ai-status-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 9px 0;
+  font-size: 14px;
+}
+
+.ai-status-row small {
+  margin-left: auto;
+  color: #667085;
+}
+
+.status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-dot.online {
+  background: #16a34a;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.12);
+}
+
+.status-dot.offline {
+  background: #d0d5dd;
+}

@@ -8,6 +8,7 @@ import { detectIntent } from "./src/intelligence/intentRouter.js";
 import { answerErpQuestion } from "./src/context/erpAnswerEngine.js";
 import { answerGeneralQuestion } from "./src/answer/generalAnswerEngine.js";
 import { directAiAnswer } from "./src/ai/directAiAnswer.js";
+import { getAiStatus } from "./src/ai/aiStatus.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -63,7 +64,10 @@ app.post("/api/task", async (req, res) => {
         ok: true,
         intent,
         projectKey,
-        answer: answerErpQuestion(task)
+        answer: answerErpQuestion(task),
+        source: "ERP Context Engine",
+        mode: "project-context",
+        aiStatus: getAiStatus()
       });
       return;
     }
@@ -73,7 +77,10 @@ app.post("/api/task", async (req, res) => {
       res.json({
         ok: true,
         intent,
-        answer
+        answer,
+        source: "ChatGPT",
+        mode: "direct-answer",
+        aiStatus: getAiStatus()
       });
       return;
     }
@@ -86,7 +93,10 @@ app.post("/api/task", async (req, res) => {
       output,
       answer: parsed.answer,
       outputFile: parsed.outputFile,
-      projectKey: parsed.projectKey
+      projectKey: parsed.projectKey,
+      source: "Multi-Agent",
+      mode: "decision",
+      aiStatus: getAiStatus()
     });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
@@ -113,6 +123,13 @@ app.get("/api/health", async (req, res) => {
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }
+});
+
+app.get("/api/ai-status", (req, res) => {
+  res.json({
+    ok: true,
+    aiStatus: getAiStatus()
+  });
 });
 
 app.get("/api/reports", (req, res) => {
