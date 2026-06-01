@@ -15,6 +15,13 @@ app.use(express.json({ limit: "20mb" }));
 app.use(express.static(path.join(__dirname, "public")));
 
 
+function extractLastJsonObject(output) {
+  const text = String(output || "").trim();
+  const start = text.lastIndexOf("{");
+  if (start === -1) throw new Error("No JSON object found in task output");
+  return JSON.parse(text.slice(start));
+}
+
 function detectProject(input) {
   const t = String(input || "").toLowerCase();
   if (t.includes("erp") || input.includes("導覽機") || input.includes("租賃")) return "erp";
@@ -44,7 +51,7 @@ app.post("/api/task", async (req, res) => {
     }
 
     const output = await runNodeScript(["src/orchestrator/runAndSaveProjectTask.js", detectProject(task), task]);
-    const parsed = JSON.parse(output);
+    const parsed = extractLastJsonObject(output);
     res.json({
       ok: true,
       output,
