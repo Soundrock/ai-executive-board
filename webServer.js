@@ -4,6 +4,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { execFile } from "child_process";
 import fs from "fs";
+import multer from "multer";
 import { detectIntent } from "./src/intelligence/intentRouter.js";
 import { answerErpQuestion } from "./src/context/erpAnswerEngine.js";
 import { answerGeneralQuestion } from "./src/answer/generalAnswerEngine.js";
@@ -18,6 +19,11 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+const upload = multer({
+  dest: "uploads/",
+  limits: { fileSize: 50 * 1024 * 1024 }
+});
 
 app.use(express.json({ limit: "20mb" }));
 app.use(express.static(path.join(__dirname, "public")));
@@ -49,6 +55,47 @@ function runNodeScript(args) {
     });
   });
 }
+
+app.post("/api/upload", upload.array("files", 20), (req, res) => {
+  const files = (req.files || []).map(file => ({
+    originalName: file.originalname,
+    filename: file.filename,
+    path: file.path,
+    mimeType: file.mimetype,
+    size: file.size,
+    uploadedAt: new Date().toISOString()
+  }));
+
+  fs.mkdirSync("data", { recursive: true });
+  const historyFile = "data/upload-history.json";
+  let history = [];
+  try {
+    if (fs.existsSync(historyFile)) {
+      history = JSON.parse(fs.readFileSync(historyFile, "utf8"));
+    }
+  } catch {
+    history = [];
+  }
+
+  history.push(...files);
+  fs.writeFileSync(historyFile, JSON.stringify(history.slice(-500), null, 2));
+
+  res.json({ ok: true, files });
+});
+
+app.get("/api/uploads", (req, res) => {
+  const historyFile = "data/upload-history.json";
+  let files = [];
+  try {
+    if (fs.existsSync(historyFile)) {
+      files = JSON.parse(fs.readFileSync(historyFile, "utf8"));
+    }
+  } catch {
+    files = [];
+  }
+
+  res.json({ ok: true, files: files.slice(-100).reverse() });
+});
 
 app.post("/api/task", async (req, res) => {
   try {

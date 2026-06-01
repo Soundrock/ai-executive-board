@@ -2,6 +2,8 @@ const sendButton = document.getElementById("send");
 const questionInput = document.getElementById("question");
 const conversation = document.getElementById("conversation");
 let pendingFiles = [];
+let uploadedFiles = [];
+let currentLocation = null;
 window.modelOptions = {};
 
 function escapeHtml(text) {
@@ -124,21 +126,30 @@ function enhanceAiPanels(aiStatus = {}) {
 }
 
 async function getBrowserLocation() {
+  if (currentLocation) return currentLocation;
   if (!navigator.geolocation) return null;
 
   return new Promise(resolve => {
     navigator.geolocation.getCurrentPosition(
       position => {
-        resolve({
+        currentLocation = {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
           city: null
-        });
+        };
+        resolve(currentLocation);
       },
       () => resolve(null),
       { enableHighAccuracy: false, timeout: 5000, maximumAge: 600000 }
     );
   });
+}
+
+async function requestLocationNow() {
+  const result = await getBrowserLocation();
+  addMessage("ai", result
+    ? `<p>已取得目前位置權限。</p>`
+    : `<p>尚未取得位置。請確認瀏覽器是否允許定位。</p>`);
 }
 
 async function refreshAiStatus() {
@@ -193,7 +204,9 @@ async function runTask() {
   const task = questionInput.value.trim();
   if (!task && !pendingFiles.length) return;
 
-  addMessage("user", `<p>${escapeHtml(task)}</p>${renderPendingFiles()}`);
+  const filesToShow = renderPendingFiles();
+  addMessage("user", `<p>${escapeHtml(task)}</p>${filesToShow}`);
+  const uploaded = await uploadPendingFiles();
   questionInput.value = "";
   pendingFiles = [];
   renderInputFiles();
@@ -208,7 +221,7 @@ async function runTask() {
     const response = await fetch("/api/task", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ task, location: await getBrowserLocation() })
+      body: JSON.stringify({ task, location: await getBrowserLocation(), files: uploaded })
     });
 
     const data = await response.json();
@@ -246,6 +259,7 @@ function renderInputFiles() {
 function addFiles(files) {
   for (const file of files) {
     const item = {
+      file,
       name: file.name,
       type: file.type || "application/octet-stream",
       size: file.size,
@@ -260,6 +274,26 @@ function addFiles(files) {
   }
 
   renderInputFiles();
+}
+
+async function uploadPendingFiles() {
+  if (!pendingFiles.length) return [];
+
+  const formData = new FormData();
+  for (const item of pendingFiles) {
+    formData.append("files", item.file, item.name);
+  }
+
+  const response = await fetch("/api/upload", {
+    method: "POST",
+    body: formData
+  });
+
+  const data = await response.json();
+  if (!data.ok) throw new Error("檔案上傳失敗");
+
+  uploadedFiles = data.files || [];
+  return uploadedFiles;
 }
 
 
@@ -382,8 +416,13 @@ const healthButton = document.createElement("button");
 healthButton.textContent = "健康檢查";
 healthButton.addEventListener("click", runHealthCheck);
 
+const locationButton = document.createElement("button");
+locationButton.textContent = "取得目前位置";
+locationButton.addEventListener("click", requestLocationNow);
+
 document.querySelector(".composer-actions").insertBefore(latestButton, sendButton);
 document.querySelector(".composer-actions").insertBefore(healthButton, sendButton);
+document.querySelector(".composer-actions").insertBefore(locationButton, sendButton);
 
 async function initApp() {
   setupFileButtons();
