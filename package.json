@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "web": "node webServer.js"
+    "web": "node webServer.js",
+    "cc": "node src/orchestrator/cc.js"
   },
   "dependencies": {
     "@google/genai": "^1.0.0",
