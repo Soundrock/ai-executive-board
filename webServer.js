@@ -6,6 +6,7 @@ import { execFile } from "child_process";
 import fs from "fs";
 import { detectIntent } from "./src/intelligence/intentRouter.js";
 import { answerErpQuestion } from "./src/context/erpAnswerEngine.js";
+import { answerGeneralQuestion } from "./src/answer/generalAnswerEngine.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -70,7 +71,7 @@ app.post("/api/task", async (req, res) => {
       res.json({
         ok: true,
         intent,
-        answer: "我可以直接回答一般問題，但目前還沒接即時天氣與定位。請告訴我城市，例如：台北，我就可以依照該地點回答。"
+        answer: await answerGeneralQuestion(task)
       });
       return;
     }
