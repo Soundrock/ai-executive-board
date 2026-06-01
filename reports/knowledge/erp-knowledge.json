@@ -1,0 +1,39 @@
+{
+  "project": "ERP",
+  "generatedAt": "2026-06-01T02:33:08.601Z",
+  "currentStatus": "Active Development",
+  "repo": "Soundrock/tour-guide-rental-erp",
+  "defaultBranch": "main",
+  "branches": [
+    "dev",
+    "finance-safe-v0402",
+    "fix/reminder-center-filter",
+    "main",
+    "restore-v039-test",
+    "stable-v0392-sidebar"
+  ],
+  "latestCommits": [
+    {
+      "sha": "26d3d20",
+      "message": "Clean backup files and update gitignore",
+      "date": "2026-05-27T06:56:10Z"
+    },
+    {
+      "sha": "4098743",
+      "message": "Initial working ERP version",
+      "date": "2026-05-27T06:49:26Z"
+    }
+  ],
+  "roadmap": [
+    "Inventory Logic",
+    "Finance Workflow",
+    "Import Center",
+    "ERP Memory",
+    "Document Workflow"
+  ],
+  "knownIssues": [
+    "Inventory reminder logic verification",
+    "Import workflow standardization",
+    "Finance report integration"
+  ]
+}
