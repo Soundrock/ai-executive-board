@@ -25,7 +25,10 @@ function escapeHtml(text) {
 function renderMeta(data) {
   const source = data.source || "未知";
   const mode = data.mode || data.intent || "未知";
-  return `<div class="answer-meta">來源：${escapeHtml(source)}｜模式：${escapeHtml(mode)}</div>`;
+  const inactive = Array.isArray(data.inactiveAis) && data.inactiveAis.length
+    ? `｜未參與：${data.inactiveAis.map(x => `${x.ai} (${x.error})`).join("、")}`
+    : "";
+  return `<div class="answer-meta">來源：${escapeHtml(source)}｜模式：${escapeHtml(mode)}${escapeHtml(inactive)}</div>`;
 }
 
 function renderAiResponses(data) {
@@ -46,10 +49,13 @@ function renderAiStatus(aiStatus = {}) {
   const items = Object.entries(aiStatus).map(([id, ai]) => {
     const cls = ai.connected ? "online" : "offline";
     const label = ai.connected ? "已連線" : "未連線";
-    return `<div class="ai-status-row" data-ai="${id}">
+    const model = ai.model ? ` / ${ai.model}` : "";
+    const time = ai.responseTimeMs ? ` / ${ai.responseTimeMs}ms` : "";
+    const error = ai.error ? ` / ${ai.error}` : "";
+    return `<div class="ai-status-row" data-ai="${id}" title="${escapeHtml(error)}">
       <span class="status-dot ${cls}"></span>
-      <span>${escapeHtml(ai.name)}</span>
-      <small>${label}</small>
+      <span>${escapeHtml(ai.name)}<small>${escapeHtml(model)}</small></span>
+      <small>${label}${escapeHtml(time)}</small>
     </div>`;
   }).join("");
 

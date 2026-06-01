@@ -92,10 +92,17 @@ ${responses.find(r => r.ai === "DeepSeek")?.answer || responses.find(r => r.ai =
 
   const finalResult = await safeAsk("Controller", askOpenAI, controllerPrompt);
 
+  const activeAis = responses.filter(r => r.ok).map(r => r.ai);
+  const inactiveAis = responses.filter(r => !r.ok).map(r => ({
+    ai: r.ai,
+    error: r.error || "Failed"
+  }));
+
   return {
     ok: true,
     mode: "real-multi-ai",
-    source: "ChatGPT + Gemini + DeepSeek",
+    source: activeAis.length ? activeAis.join(" + ") : "No AI connected",
+    inactiveAis,
     question,
     aiStatus: responses.map(r => ({
       ai: r.ai,

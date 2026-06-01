@@ -83,7 +83,8 @@ app.post("/api/task", async (req, res) => {
         mode: multiAi.mode,
         aiStatus: getAiStatus(),
         aiResponses: multiAi.responses,
-        aiRunStatus: multiAi.aiStatus
+        aiRunStatus: multiAi.aiStatus,
+        inactiveAis: multiAi.inactiveAis || []
       });
       return;
     }
