@@ -1,0 +1,24 @@
+{
+  "timestamp": "2026-06-01T06:46:54.145Z",
+  "openai": {
+    "ai": "OpenAI",
+    "model": "gpt-4.1-mini",
+    "status": "CONNECTED",
+    "responseTimeMs": 2124,
+    "preview": "{\"agent\":\"OpenAI\",\"ok\":true,\"answer\":\"AI=OpenAI  \\nMODEL_CHECK=PASS\"}"
+  },
+  "gemini": {
+    "ai": "Gemini",
+    "model": "gemini-2.5-flash",
+    "status": "CONNECTED",
+    "responseTimeMs": 715,
+    "preview": "{\"agent\":\"Gemini\",\"ok\":false,\"answer\":\"{\\\"error\\\":{\\\"code\\\":429,\\\"message\\\":\\\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://a"
+  },
+  "deepseek": {
+    "ai": "DeepSeek",
+    "model": "deepseek-chat",
+    "status": "CONNECTED",
+    "responseTimeMs": 1155,
+    "preview": "{\"agent\":\"DeepSeek\",\"ok\":true,\"answer\":\"AI=DeepSeek\\nMODEL_CHECK=PASS\"}"
+  }
+}
