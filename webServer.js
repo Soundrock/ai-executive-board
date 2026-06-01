@@ -9,6 +9,7 @@ import { answerErpQuestion } from "./src/context/erpAnswerEngine.js";
 import { answerGeneralQuestion } from "./src/answer/generalAnswerEngine.js";
 import { directAiAnswer } from "./src/ai/directAiAnswer.js";
 import { getAiStatus } from "./src/ai/aiStatus.js";
+import { runRealMultiAiDiscussion } from "./src/multi-ai/realMultiAiDiscussion.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -73,14 +74,16 @@ app.post("/api/task", async (req, res) => {
     }
 
     if (intent === "direct-answer") {
-      const answer = await directAiAnswer(task);
+      const multiAi = await runRealMultiAiDiscussion(task);
       res.json({
         ok: true,
         intent,
-        answer,
-        source: "ChatGPT",
-        mode: "direct-answer",
-        aiStatus: getAiStatus()
+        answer: multiAi.finalAnswer,
+        source: multiAi.source,
+        mode: multiAi.mode,
+        aiStatus: getAiStatus(),
+        aiResponses: multiAi.responses,
+        aiRunStatus: multiAi.aiStatus
       });
       return;
     }

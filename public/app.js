@@ -28,6 +28,20 @@ function renderMeta(data) {
   return `<div class="answer-meta">來源：${escapeHtml(source)}｜模式：${escapeHtml(mode)}</div>`;
 }
 
+function renderAiResponses(data) {
+  if (!Array.isArray(data.aiResponses)) return "";
+
+  return `<details class="ai-responses">
+    <summary>查看三個 AI 的原始回答</summary>
+    ${data.aiResponses.map(item => `
+      <section class="ai-response-card">
+        <h4>${escapeHtml(item.ai)} ${item.ok ? "✅" : "❌"}</h4>
+        <pre>${escapeHtml(item.answer || item.error || "沒有回覆")}</pre>
+      </section>
+    `).join("")}
+  </details>`;
+}
+
 function renderAiStatus(aiStatus = {}) {
   const items = Object.entries(aiStatus).map(([id, ai]) => {
     const cls = ai.connected ? "online" : "offline";
@@ -100,7 +114,7 @@ async function runTask() {
     if (data.aiStatus) renderAiStatus(data.aiStatus);
 
     const answer = data.answer || data.output || "沒有取得答案";
-    addMessage("ai", `<strong>任務完成</strong>${renderMeta(data)}<pre>${escapeHtml(answer)}</pre>`);
+    addMessage("ai", `<strong>任務完成</strong>${renderMeta(data)}<pre>${escapeHtml(answer)}</pre>${renderAiResponses(data)}`);
   } catch (error) {
     loading.remove();
     addMessage("ai", `<strong>錯誤</strong><p>${escapeHtml(error.message)}</p>`);
