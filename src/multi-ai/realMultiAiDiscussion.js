@@ -58,9 +58,18 @@ ${question}
 
   const responses = await Promise.all([
     safeAsk("ChatGPT", askOpenAI, basePrompt),
-    safeAsk("Gemini", askGemini, basePrompt),
     safeAsk("DeepSeek", askDeepSeek, basePrompt)
   ]);
+
+  const geminiSkipped = {
+    ai: "Gemini",
+    ok: false,
+    durationMs: 0,
+    answer: "",
+    error: "Skipped because Gemini quota is currently exceeded"
+  };
+
+  responses.splice(1, 0, geminiSkipped);
 
   const controllerPrompt = `
 你是 Vincent AI Command Center 的主控 AI。
