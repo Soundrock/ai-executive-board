@@ -1,0 +1,18 @@
+{
+  "projectKey": "image",
+  "projectName": "AI Image Magician",
+  "generatedAt": "2026-06-01T02:37:14.063Z",
+  "repo": "Soundrock/ai-image-magician",
+  "branches": [
+    "develop",
+    "main"
+  ],
+  "latestCommits": [
+    {
+      "sha": "cae7c5b",
+      "message": "Initial project structure and UI references",
+      "date": "2026-05-29T18:12:37Z"
+    }
+  ],
+  "fileCount": 129
+}

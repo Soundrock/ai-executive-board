@@ -1,0 +1,18 @@
+{
+  "projectKey": "command",
+  "projectName": "Vincent AI Command Center",
+  "generatedAt": "2026-06-01T02:37:16.720Z",
+  "repo": "Soundrock/vincent-ai-command-center",
+  "branches": [
+    "main",
+    "v0.3-agent-router-architecture"
+  ],
+  "latestCommits": [
+    {
+      "sha": "62f405c",
+      "message": "v0.1 OpenAI and Gemini multi-agent CLI",
+      "date": "2026-05-31T01:39:51Z"
+    }
+  ],
+  "fileCount": 11
+}
