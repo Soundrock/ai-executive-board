@@ -1,0 +1,42 @@
+{
+  "controller": "ChatGPT",
+  "participants": [
+    "Gemini",
+    "DeepSeek"
+  ],
+  "researchLevel": "standard",
+  "weights": {
+    "chatgpt": 40,
+    "gemini": 30,
+    "deepseek": 30
+  },
+  "roundOne": [
+    {
+      "agentId": "gemini",
+      "agentName": "Gemini",
+      "ok": false,
+      "answer": "GEMINI_API_KEY 尚未設定"
+    },
+    {
+      "agentId": "deepseek",
+      "agentName": "DeepSeek",
+      "ok": false,
+      "answer": "DEEPSEEK_API_KEY 尚未設定"
+    }
+  ],
+  "roundTwo": [
+    {
+      "agentId": "gemini",
+      "agentName": "Gemini",
+      "ok": false,
+      "answer": "GEMINI_API_KEY 尚未設定"
+    },
+    {
+      "agentId": "deepseek",
+      "agentName": "DeepSeek",
+      "ok": false,
+      "answer": "DEEPSEEK_API_KEY 尚未設定"
+    }
+  ],
+  "final": "OPENAI_API_KEY 尚未設定"
+}
