@@ -39,7 +39,9 @@ export function detectIntent(question = "") {
   if (
     q.includes("進度") ||
     q.includes("做到哪") ||
-    q.includes("目前狀態")
+    q.includes("目前狀態") ||
+    q.includes("在做什麼") ||
+    q.includes("目前功能")
   ) {
     return "memory";
   }
