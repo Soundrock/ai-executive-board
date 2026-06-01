@@ -1,16 +1,7 @@
 const sendButton = document.getElementById("send");
 const questionInput = document.getElementById("question");
 const conversation = document.getElementById("conversation");
-
-function addMessage(type, html) {
-  const message = document.createElement("div");
-  message.className = `message ${type}-message`;
-  message.innerHTML = `<div class="bubble">${html}</div>`;
-  conversation.appendChild(message);
-  requestAnimationFrame(() => {
-    conversation.scrollTop = conversation.scrollHeight;
-  });
-}
+let pendingFiles = [];
 
 function escapeHtml(text) {
   return String(text).replace(/[&<>"']/g, char => ({
@@ -20,6 +11,26 @@ function escapeHtml(text) {
     '"': "&quot;",
     "'": "&#039;"
   }[char]));
+}
+
+function renderPendingFiles() {
+  if (!pendingFiles.length) return "";
+  return `<div class="file-preview-list">${pendingFiles.map(file => `
+    <div class="file-preview">
+      ${file.type.startsWith("image/") ? `<img src="${file.preview}" alt="${escapeHtml(file.name)}">` : ""}
+      <span>${escapeHtml(file.name)}</span>
+    </div>
+  `).join("")}</div>`;
+}
+
+function addMessage(type, html) {
+  const message = document.createElement("div");
+  message.className = `message ${type}-message`;
+  message.innerHTML = `<div class="bubble">${html}</div>`;
+  conversation.appendChild(message);
+  requestAnimationFrame(() => {
+    conversation.scrollTop = conversation.scrollHeight;
+  });
 }
 
 function renderMeta(data) {
@@ -35,7 +46,7 @@ function renderAiResponses(data) {
   if (!Array.isArray(data.aiResponses)) return "";
 
   return `<details class="ai-responses">
-    <summary>查看三個 AI 的原始回答</summary>
+    <summary>查看 AI 原始回答</summary>
     ${data.aiResponses.map(item => `
       <section class="ai-response-card">
         <h4>${escapeHtml(item.ai)} ${item.ok ? "✅" : "❌"}</h4>
@@ -92,90 +103,6 @@ async function refreshAiStatus() {
   }
 }
 
-async function runTask() {
-  const task = questionInput.value.trim();
-  if (!task) return;
-
-  addMessage("user", `<strong>你</strong><p>${escapeHtml(task)}</p>`);
-  questionInput.value = "";
-
-  const loading = document.createElement("div");
-  loading.className = "message ai-message";
-  loading.innerHTML = `<div class="bubble"><strong>智策中心</strong><p>任務執行中，請稍候...</p></div>`;
-  conversation.appendChild(loading);
-  conversation.scrollTop = conversation.scrollHeight;
-
-  try {
-    const response = await fetch("/api/task", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ task, location: await getBrowserLocation() })
-    });
-
-    const data = await response.json();
-
-    if (!data.ok) throw new Error(data.error);
-
-    loading.remove();
-    if (data.aiStatus) renderAiStatus(data.aiStatus);
-
-    const answer = data.answer || data.output || "沒有取得答案";
-    addMessage("ai", `<strong>任務完成</strong>${renderMeta(data)}<pre>${escapeHtml(answer)}</pre>${renderAiResponses(data)}`);
-  } catch (error) {
-    loading.remove();
-    addMessage("ai", `<strong>錯誤</strong><p>${escapeHtml(error.message)}</p>`);
-  }
-}
-
-async function showLatestReport() {
-  addMessage("ai", "<strong>智策中心</strong><p>正在讀取最新報告...</p>");
-
-  try {
-    const response = await fetch("/api/latest-report");
-    const data = await response.json();
-    if (!data.ok) throw new Error(data.error);
-    addMessage("ai", `<strong>最新報告</strong><pre>${escapeHtml(data.output)}</pre>`);
-  } catch (error) {
-    addMessage("ai", `<strong>錯誤</strong><p>${escapeHtml(error.message)}</p>`);
-  }
-}
-
-async function runHealthCheck() {
-  addMessage("ai", "<strong>智策中心</strong><p>正在執行健康檢查...</p>");
-
-  try {
-    const response = await fetch("/api/health");
-    const data = await response.json();
-    if (!data.ok) throw new Error(data.error);
-    addMessage("ai", `<strong>健康檢查完成</strong><pre>${escapeHtml(data.output)}</pre>`);
-  } catch (error) {
-    addMessage("ai", `<strong>錯誤</strong><p>${escapeHtml(error.message)}</p>`);
-  }
-}
-
-sendButton.addEventListener("click", runTask);
-
-questionInput.addEventListener("keydown", event => {
-  if (event.key === "Enter" && event.metaKey) {
-    runTask();
-  }
-});
-
-const latestButton = document.createElement("button");
-latestButton.textContent = "最新報告";
-latestButton.addEventListener("click", showLatestReport);
-
-const healthButton = document.createElement("button");
-healthButton.textContent = "健康檢查";
-healthButton.addEventListener("click", runHealthCheck);
-
-document.querySelector(".composer-actions").insertBefore(latestButton, sendButton);
-document.querySelector(".composer-actions").insertBefore(healthButton, sendButton);
-
-refreshAiStatus();
-setInterval(refreshAiStatus, 30000);
-
-
 async function refreshUsage() {
   try {
     const response = await fetch("/api/usage");
@@ -203,16 +130,168 @@ async function refreshUsage() {
   }
 }
 
-async function refreshModelOptions() {
+async function runTask() {
+  const task = questionInput.value.trim();
+  if (!task && !pendingFiles.length) return;
+
+  addMessage("user", `<p>${escapeHtml(task)}</p>${renderPendingFiles()}`);
+  questionInput.value = "";
+  pendingFiles = [];
+  renderInputFiles();
+
+  const loading = document.createElement("div");
+  loading.className = "message ai-message";
+  loading.innerHTML = `<div class="bubble"><p>處理中...</p></div>`;
+  conversation.appendChild(loading);
+  conversation.scrollTop = conversation.scrollHeight;
+
   try {
-    const response = await fetch("/api/model-options");
+    const response = await fetch("/api/task", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ task, location: await getBrowserLocation() })
+    });
+
     const data = await response.json();
-    window.modelOptions = data.models || {};
-  } catch {
-    window.modelOptions = {};
+
+    if (!data.ok) throw new Error(data.error);
+
+    loading.remove();
+    if (data.aiStatus) renderAiStatus(data.aiStatus);
+
+    const answer = data.answer || data.output || "沒有取得答案";
+    addMessage("ai", `${renderMeta(data)}<pre>${escapeHtml(answer)}</pre>${renderAiResponses(data)}`);
+    refreshUsage();
+  } catch (error) {
+    loading.remove();
+    addMessage("ai", `<p>${escapeHtml(error.message)}</p>`);
   }
 }
 
+function renderInputFiles() {
+  let box = document.getElementById("input-file-preview");
+  if (!box) {
+    box = document.createElement("div");
+    box.id = "input-file-preview";
+    questionInput.parentElement.insertBefore(box, document.querySelector(".composer-actions"));
+  }
+
+  box.innerHTML = pendingFiles.map(file => `
+    <div class="file-preview">
+      ${file.type.startsWith("image/") ? `<img src="${file.preview}" alt="${escapeHtml(file.name)}">` : ""}
+      <span>${escapeHtml(file.name)}</span>
+    </div>
+  `).join("");
+}
+
+function addFiles(files) {
+  for (const file of files) {
+    const item = {
+      name: file.name,
+      type: file.type || "application/octet-stream",
+      size: file.size,
+      preview: ""
+    };
+
+    if (item.type.startsWith("image/")) {
+      item.preview = URL.createObjectURL(file);
+    }
+
+    pendingFiles.push(item);
+  }
+
+  renderInputFiles();
+}
+
+function setupFileButtons() {
+  const attachmentButton = [...document.querySelectorAll(".composer-actions button")].find(b => b.textContent === "附件");
+  const imageButton = [...document.querySelectorAll(".composer-actions button")].find(b => b.textContent === "圖片");
+
+  const fileInput = document.createElement("input");
+  fileInput.type = "file";
+  fileInput.multiple = true;
+  fileInput.style.display = "none";
+
+  const imageInput = document.createElement("input");
+  imageInput.type = "file";
+  imageInput.accept = "image/*";
+  imageInput.multiple = true;
+  imageInput.style.display = "none";
+
+  document.body.appendChild(fileInput);
+  document.body.appendChild(imageInput);
+
+  if (attachmentButton) attachmentButton.addEventListener("click", () => fileInput.click());
+  if (imageButton) imageButton.addEventListener("click", () => imageInput.click());
+
+  fileInput.addEventListener("change", () => addFiles(fileInput.files));
+  imageInput.addEventListener("change", () => addFiles(imageInput.files));
+
+  const composer = document.querySelector(".composer");
+
+  composer.addEventListener("dragover", event => {
+    event.preventDefault();
+    composer.classList.add("drag-over");
+  });
+
+  composer.addEventListener("dragleave", () => {
+    composer.classList.remove("drag-over");
+  });
+
+  composer.addEventListener("drop", event => {
+    event.preventDefault();
+    composer.classList.remove("drag-over");
+    addFiles(event.dataTransfer.files);
+  });
+}
+
+async function showLatestReport() {
+  addMessage("ai", "<p>正在讀取最新報告...</p>");
+
+  try {
+    const response = await fetch("/api/latest-report");
+    const data = await response.json();
+    if (!data.ok) throw new Error(data.error);
+    addMessage("ai", `<pre>${escapeHtml(data.output)}</pre>`);
+  } catch (error) {
+    addMessage("ai", `<p>${escapeHtml(error.message)}</p>`);
+  }
+}
+
+async function runHealthCheck() {
+  addMessage("ai", "<p>正在執行健康檢查...</p>");
+
+  try {
+    const response = await fetch("/api/health");
+    const data = await response.json();
+    if (!data.ok) throw new Error(data.error);
+    addMessage("ai", `<pre>${escapeHtml(data.output)}</pre>`);
+  } catch (error) {
+    addMessage("ai", `<p>${escapeHtml(error.message)}</p>`);
+  }
+}
+
+sendButton.addEventListener("click", runTask);
+
+questionInput.addEventListener("keydown", event => {
+  if (event.key === "Enter" && event.metaKey) {
+    runTask();
+  }
+});
+
+const latestButton = document.createElement("button");
+latestButton.textContent = "最新報告";
+latestButton.addEventListener("click", showLatestReport);
+
+const healthButton = document.createElement("button");
+healthButton.textContent = "健康檢查";
+healthButton.addEventListener("click", runHealthCheck);
+
+document.querySelector(".composer-actions").insertBefore(latestButton, sendButton);
+document.querySelector(".composer-actions").insertBefore(healthButton, sendButton);
+
+setupFileButtons();
+refreshAiStatus();
 refreshUsage();
-refreshModelOptions();
+setInterval(refreshAiStatus, 30000);
 setInterval(refreshUsage, 30000);
