@@ -385,9 +385,13 @@ healthButton.addEventListener("click", runHealthCheck);
 document.querySelector(".composer-actions").insertBefore(latestButton, sendButton);
 document.querySelector(".composer-actions").insertBefore(healthButton, sendButton);
 
-setupFileButtons();
-await refreshModelOptions();
-refreshAiStatus();
-refreshUsage();
-setInterval(refreshAiStatus, 30000);
-setInterval(refreshUsage, 30000);
+async function initApp() {
+  setupFileButtons();
+  await refreshModelOptions();
+  refreshAiStatus();
+  refreshUsage();
+  setInterval(refreshAiStatus, 30000);
+  setInterval(refreshUsage, 30000);
+}
+
+initApp();
