@@ -4,6 +4,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { execFile } from "child_process";
 import fs from "fs";
+import { detectIntent } from "./src/intelligence/intentRouter.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -50,10 +51,22 @@ app.post("/api/task", async (req, res) => {
       return;
     }
 
+    const intent = detectIntent(task);
+
+    if (intent === "direct-answer") {
+      res.json({
+        ok: true,
+        intent,
+        answer: "這是一般問題，不需要開多 AI 會議。請提供需要查詢的地點或資料，我會直接回答。"
+      });
+      return;
+    }
+
     const output = await runNodeScript(["src/orchestrator/runAndSaveProjectTask.js", detectProject(task), task]);
-    const parsed = extractLastJsonObject(output);
+    const parsed = JSON.parse(output);
     res.json({
       ok: true,
+      intent,
       output,
       answer: parsed.answer,
       outputFile: parsed.outputFile,
