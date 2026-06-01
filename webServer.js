@@ -5,6 +5,7 @@ import { fileURLToPath } from "url";
 import { execFile } from "child_process";
 import fs from "fs";
 import { detectIntent } from "./src/intelligence/intentRouter.js";
+import { answerErpQuestion } from "./src/context/erpAnswerEngine.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -53,16 +54,28 @@ app.post("/api/task", async (req, res) => {
 
     const intent = detectIntent(task);
 
-    if (intent === "direct-answer") {
+    const projectKey = detectProject(task);
+
+    if (projectKey === "erp" && (intent === "decision" || intent === "memory")) {
       res.json({
         ok: true,
         intent,
-        answer: "這是一般問題，不需要開多 AI 會議。請提供需要查詢的地點或資料，我會直接回答。"
+        projectKey,
+        answer: answerErpQuestion(task)
       });
       return;
     }
 
-    const output = await runNodeScript(["src/orchestrator/runAndSaveProjectTask.js", detectProject(task), task]);
+    if (intent === "direct-answer") {
+      res.json({
+        ok: true,
+        intent,
+        answer: "我可以直接回答一般問題，但目前還沒接即時天氣與定位。請告訴我城市，例如：台北，我就可以依照該地點回答。"
+      });
+      return;
+    }
+
+    const output = await runNodeScript(["src/orchestrator/runAndSaveProjectTask.js", projectKey, task]);
     const parsed = JSON.parse(output);
     res.json({
       ok: true,
