@@ -263,8 +263,8 @@ function addFiles(files) {
 }
 
 function setupFileButtons() {
-  const attachmentButton = [...document.querySelectorAll(".composer-actions button")].find(b => b.textContent === "附件");
-  const imageButton = [...document.querySelectorAll(".composer-actions button")].find(b => b.textContent === "圖片");
+  const attachmentButton = [...document.querySelectorAll(".composer-actions button")].find(b => b.textContent.trim() === "附件");
+  const imageButton = [...document.querySelectorAll(".composer-actions button")].find(b => b.textContent.trim() === "圖片");
 
   const fileInput = document.createElement("input");
   fileInput.type = "file";
@@ -281,8 +281,23 @@ function setupFileButtons() {
   document.body.appendChild(fileInput);
   document.body.appendChild(imageInput);
 
-  if (attachmentButton) attachmentButton.addEventListener("click", () => fileInput.click());
-  if (imageButton) imageButton.addEventListener("click", () => imageInput.click());
+  if (attachmentButton) {
+    attachmentButton.type = "button";
+    attachmentButton.addEventListener("click", event => {
+      event.preventDefault();
+      event.stopPropagation();
+      fileInput.click();
+    });
+  }
+
+  if (imageButton) {
+    imageButton.type = "button";
+    imageButton.addEventListener("click", event => {
+      event.preventDefault();
+      event.stopPropagation();
+      imageInput.click();
+    });
+  }
 
   fileInput.addEventListener("change", () => addFiles(fileInput.files));
   imageInput.addEventListener("change", () => addFiles(imageInput.files));
