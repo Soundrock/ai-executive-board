@@ -2,6 +2,7 @@ import "dotenv/config";
 import { askOpenAI } from "../../agents/openai.js";
 import { askGemini } from "../../agents/gemini.js";
 import { askDeepSeek } from "../../agents/deepseek.js";
+import { recordUsage } from "../usage/usageTracker.js";
 
 function cleanText(value) {
   if (!value) return "";

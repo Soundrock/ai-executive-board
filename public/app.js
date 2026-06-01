@@ -174,3 +174,45 @@ document.querySelector(".composer-actions").insertBefore(healthButton, sendButto
 
 refreshAiStatus();
 setInterval(refreshAiStatus, 30000);
+
+
+async function refreshUsage() {
+  try {
+    const response = await fetch("/api/usage");
+    const data = await response.json();
+    const target = document.getElementById("usage-box");
+    if (!target || !data.ok) return;
+
+    const usage = data.usage;
+    const rows = Object.entries(usage.byModel || {}).map(([model, item]) => `
+      <div class="usage-row">
+        <span>${escapeHtml(model)}</span>
+        <small>${item.calls} 次 / 約 $${Number(item.estimatedCostUsd).toFixed(4)}</small>
+      </div>
+    `).join("");
+
+    target.innerHTML = `
+      <div class="usage-total">總次數：${usage.totalCalls}</div>
+      <div class="usage-total">預估費用：約 $${usage.estimatedCostUsd}</div>
+      ${rows || "<div class='usage-row'>尚無使用紀錄</div>"}
+      <p class="usage-note">${escapeHtml(usage.note)}</p>
+    `;
+  } catch {
+    const target = document.getElementById("usage-box");
+    if (target) target.innerHTML = "用量讀取失敗";
+  }
+}
+
+async function refreshModelOptions() {
+  try {
+    const response = await fetch("/api/model-options");
+    const data = await response.json();
+    window.modelOptions = data.models || {};
+  } catch {
+    window.modelOptions = {};
+  }
+}
+
+refreshUsage();
+refreshModelOptions();
+setInterval(refreshUsage, 30000);

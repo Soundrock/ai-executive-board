@@ -10,6 +10,8 @@ import { answerGeneralQuestion } from "./src/answer/generalAnswerEngine.js";
 import { directAiAnswer } from "./src/ai/directAiAnswer.js";
 import { getAiStatus } from "./src/ai/aiStatus.js";
 import { runRealMultiAiDiscussion } from "./src/multi-ai/realMultiAiDiscussion.js";
+import { getUsageSummary } from "./src/usage/usageTracker.js";
+import { getModelOptions } from "./src/models/modelOptions.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -127,6 +129,20 @@ app.get("/api/health", async (req, res) => {
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }
+});
+
+app.get("/api/usage", (req, res) => {
+  res.json({
+    ok: true,
+    usage: getUsageSummary()
+  });
+});
+
+app.get("/api/model-options", (req, res) => {
+  res.json({
+    ok: true,
+    models: getModelOptions()
+  });
 });
 
 app.get("/api/ai-status", (req, res) => {

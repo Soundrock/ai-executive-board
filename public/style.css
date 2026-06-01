@@ -312,3 +312,23 @@ button.send {
   margin: 0 0 8px;
   font-size: 14px;
 }
+
+.usage-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid #f2f4f7;
+  font-size: 13px;
+}
+
+.usage-total {
+  font-size: 14px;
+  margin: 6px 0;
+}
+
+.usage-note {
+  font-size: 12px;
+  color: #667085;
+  line-height: 1.5;
+}
