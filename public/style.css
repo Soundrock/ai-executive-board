@@ -1,7 +1,9 @@
 * { box-sizing: border-box; }
 
-body {
+html, body {
   margin: 0;
+  height: 100%;
+  overflow: hidden;
   font-family: Arial, "Noto Sans TC", sans-serif;
   background: #f7f8fc;
   color: #101828;
@@ -9,18 +11,24 @@ body {
 
 .app {
   display: grid;
-  grid-template-columns: 260px 1fr 360px;
-  min-height: 100vh;
+  grid-template-columns: 260px minmax(0, 1fr) 360px;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .sidebar, .control {
+  height: 100vh;
+  overflow-y: auto;
   background: #ffffff;
-  border-right: 1px solid #e5e7eb;
   padding: 24px;
 }
 
+.sidebar {
+  border-right: 1px solid #e5e7eb;
+  position: relative;
+}
+
 .control {
-  border-right: 0;
   border-left: 1px solid #e5e7eb;
 }
 
@@ -75,6 +83,8 @@ nav button.active {
 
 .user {
   position: absolute;
+  left: 24px;
+  right: 24px;
   bottom: 24px;
   display: flex;
   align-items: center;
@@ -98,10 +108,13 @@ nav button.active {
 }
 
 .main {
-  padding: 32px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  height: 100vh;
+  min-width: 0;
+  padding: 24px 32px;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 16px;
+  overflow: hidden;
 }
 
 header {
@@ -112,7 +125,7 @@ header {
 
 header h2 {
   margin: 0;
-  font-size: 32px;
+  font-size: 30px;
 }
 
 header p {
@@ -128,13 +141,13 @@ header p {
 }
 
 .conversation {
-  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 22px;
-  padding: 24px;
-  overflow: auto;
-  min-height: 420px;
+  padding: 22px;
+  scroll-behavior: smooth;
 }
 
 .message {
@@ -142,8 +155,9 @@ header p {
 }
 
 .bubble {
-  max-width: 780px;
+  max-width: 100%;
   line-height: 1.6;
+  word-break: break-word;
 }
 
 .ai-message .bubble {
@@ -153,16 +167,27 @@ header p {
   background: #fafafa;
 }
 
+pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: none;
+  overflow: visible;
+  font-family: Arial, "Noto Sans TC", sans-serif;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
 .composer {
   background: white;
   border: 1px solid #d9d6ff;
   border-radius: 22px;
-  padding: 16px;
+  padding: 14px;
 }
 
 textarea {
   width: 100%;
-  min-height: 110px;
+  min-height: 92px;
+  max-height: 160px;
   border: 0;
   outline: 0;
   resize: vertical;
@@ -172,8 +197,9 @@ textarea {
 
 .composer-actions {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .composer-actions button {

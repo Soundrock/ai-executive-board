@@ -7,7 +7,9 @@ function addMessage(type, html) {
   message.className = `message ${type}-message`;
   message.innerHTML = `<div class="bubble">${html}</div>`;
   conversation.appendChild(message);
-  conversation.scrollTop = conversation.scrollHeight;
+  requestAnimationFrame(() => {
+    conversation.scrollTop = conversation.scrollHeight;
+  });
 }
 
 function escapeHtml(text) {
@@ -20,6 +22,21 @@ function escapeHtml(text) {
   }[char]));
 }
 
+function extractAnswer(output) {
+  try {
+    const match = output.match(/\{[\s\S]*\}$/);
+    if (!match) return output;
+
+    const data = JSON.parse(match[0]);
+
+    if (data.final) return data.final;
+    if (data.outputFile) return `任務已完成，報告已儲存：${data.outputFile}`;
+    return JSON.stringify(data, null, 2);
+  } catch {
+    return output;
+  }
+}
+
 async function runTask() {
   const task = questionInput.value.trim();
   if (!task) return;
@@ -27,7 +44,11 @@ async function runTask() {
   addMessage("user", `<strong>你</strong><p>${escapeHtml(task)}</p>`);
   questionInput.value = "";
 
-  addMessage("ai", "<strong>智策中心</strong><p>任務執行中，請稍候...</p>");
+  const loading = document.createElement("div");
+  loading.className = "message ai-message";
+  loading.innerHTML = `<div class="bubble"><strong>智策中心</strong><p>任務執行中，請稍候...</p></div>`;
+  conversation.appendChild(loading);
+  conversation.scrollTop = conversation.scrollHeight;
 
   try {
     const response = await fetch("/api/task", {
@@ -40,8 +61,11 @@ async function runTask() {
 
     if (!data.ok) throw new Error(data.error);
 
-    addMessage("ai", `<strong>任務完成</strong><pre>${escapeHtml(data.output)}</pre>`);
+    loading.remove();
+    const answer = extractAnswer(data.output);
+    addMessage("ai", `<strong>任務完成</strong><pre>${escapeHtml(answer)}</pre>`);
   } catch (error) {
+    loading.remove();
     addMessage("ai", `<strong>錯誤</strong><p>${escapeHtml(error.message)}</p>`);
   }
 }
@@ -53,7 +77,7 @@ async function showLatestReport() {
     const response = await fetch("/api/latest-report");
     const data = await response.json();
     if (!data.ok) throw new Error(data.error);
-    addMessage("ai", `<strong>最新報告</strong><pre>${escapeHtml(data.output)}</pre>`);
+    addMessage("ai", `<strong>最新報告</strong><pre>${escapeHtml(extractAnswer(data.output))}</pre>`);
   } catch (error) {
     addMessage("ai", `<strong>錯誤</strong><p>${escapeHtml(error.message)}</p>`);
   }
