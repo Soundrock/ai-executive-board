@@ -7,6 +7,7 @@ import fs from "fs";
 import { detectIntent } from "./src/intelligence/intentRouter.js";
 import { answerErpQuestion } from "./src/context/erpAnswerEngine.js";
 import { answerGeneralQuestion } from "./src/answer/generalAnswerEngine.js";
+import { directAiAnswer } from "./src/ai/directAiAnswer.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -68,10 +69,11 @@ app.post("/api/task", async (req, res) => {
     }
 
     if (intent === "direct-answer") {
+      const answer = await directAiAnswer(task);
       res.json({
         ok: true,
         intent,
-        answer: await answerGeneralQuestion(task, req.body?.location || null)
+        answer
       });
       return;
     }
