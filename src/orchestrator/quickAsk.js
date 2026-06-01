@@ -7,12 +7,10 @@ if (!task) {
   process.exit(1);
 }
 
-const output = execSync(
+execSync(
   `node src/orchestrator/commandCenterCli.js "${task.replace(/"/g, '\\"')}"`,
-  { encoding: "utf8" }
+  { stdio: "inherit" }
 );
-
-console.log(output);
 
 console.log("");
 console.log("================ TASK REPORT ================");
