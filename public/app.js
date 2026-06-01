@@ -2,6 +2,7 @@ const sendButton = document.getElementById("send");
 const questionInput = document.getElementById("question");
 const conversation = document.getElementById("conversation");
 let pendingFiles = [];
+window.modelOptions = {};
 
 function escapeHtml(text) {
   return String(text).replace(/[&<>"']/g, char => ({
@@ -72,6 +73,54 @@ function renderAiStatus(aiStatus = {}) {
 
   const target = document.getElementById("ai-status-box");
   if (target) target.innerHTML = items;
+  enhanceAiPanels(aiStatus);
+}
+
+function enhanceAiPanels(aiStatus = {}) {
+  const panels = [...document.querySelectorAll(".panel")];
+
+  for (const panel of panels) {
+    const title = panel.querySelector("h3")?.textContent || "";
+    if (!["主控 AI", "參與 AI"].includes(title)) continue;
+
+    const labels = [...panel.querySelectorAll("label, .card")];
+
+    for (const label of labels) {
+      if (label.dataset.enhanced === "true") continue;
+
+      const text = label.textContent || "";
+      let provider = "";
+      if (text.includes("ChatGPT")) provider = "openai";
+      if (text.includes("Gemini")) provider = "gemini";
+      if (text.includes("DeepSeek")) provider = "deepseek";
+
+      if (!provider) continue;
+
+      label.dataset.enhanced = "true";
+      label.classList.add("ai-choice-row");
+
+      const statusKey = provider === "openai" ? "chatgpt" : provider;
+      const status = aiStatus[statusKey];
+      const dot = document.createElement("span");
+      dot.className = `status-dot ${status?.connected ? "online" : "offline"}`;
+      label.prepend(dot);
+
+      const select = document.createElement("select");
+      select.className = "ai-model-select";
+      select.dataset.provider = provider;
+
+      const options = window.modelOptions[provider] || [];
+      for (const opt of options) {
+        const option = document.createElement("option");
+        option.value = opt.id;
+        option.textContent = opt.label;
+        if (status?.model === opt.id) option.selected = true;
+        select.appendChild(option);
+      }
+
+      label.appendChild(select);
+    }
+  }
 }
 
 async function getBrowserLocation() {
@@ -107,7 +156,7 @@ async function refreshUsage() {
   try {
     const response = await fetch("/api/usage");
     const data = await response.json();
-    const target = document.getElementById("usage-box");
+    const target = document.getElementById("usage-box") || document.getElementById("left-usage-box");
     if (!target || !data.ok) return;
 
     const usage = data.usage;
@@ -125,8 +174,18 @@ async function refreshUsage() {
       <p class="usage-note">${escapeHtml(usage.note)}</p>
     `;
   } catch {
-    const target = document.getElementById("usage-box");
+    const target = document.getElementById("usage-box") || document.getElementById("left-usage-box");
     if (target) target.innerHTML = "用量讀取失敗";
+  }
+}
+
+async function refreshModelOptions() {
+  try {
+    const response = await fetch("/api/model-options");
+    const data = await response.json();
+    window.modelOptions = data.models || {};
+  } catch {
+    window.modelOptions = {};
   }
 }
 
@@ -210,11 +269,12 @@ function setupFileButtons() {
   const fileInput = document.createElement("input");
   fileInput.type = "file";
   fileInput.multiple = true;
+  fileInput.accept = ".png,.jpg,.jpeg,.webp,.gif,.bmp,.tiff,.pdf,.doc,.docx,.xls,.xlsx,.csv,.ppt,.pptx,.txt,.eml,.msg,.zip,image/*";
   fileInput.style.display = "none";
 
   const imageInput = document.createElement("input");
   imageInput.type = "file";
-  imageInput.accept = "image/*";
+  imageInput.accept = "image/*,.png,.jpg,.jpeg,.webp,.gif,.bmp,.tiff";
   imageInput.multiple = true;
   imageInput.style.display = "none";
 
@@ -226,6 +286,11 @@ function setupFileButtons() {
 
   fileInput.addEventListener("change", () => addFiles(fileInput.files));
   imageInput.addEventListener("change", () => addFiles(imageInput.files));
+
+  questionInput.addEventListener("paste", event => {
+    const files = event.clipboardData?.files;
+    if (files && files.length) addFiles(files);
+  });
 
   const composer = document.querySelector(".composer");
 
@@ -291,6 +356,7 @@ document.querySelector(".composer-actions").insertBefore(latestButton, sendButto
 document.querySelector(".composer-actions").insertBefore(healthButton, sendButton);
 
 setupFileButtons();
+await refreshModelOptions();
 refreshAiStatus();
 refreshUsage();
 setInterval(refreshAiStatus, 30000);
