@@ -37,6 +37,24 @@ function extractAnswer(output) {
   }
 }
 
+async function getBrowserLocation() {
+  if (!navigator.geolocation) return null;
+
+  return new Promise(resolve => {
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        resolve({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          city: null
+        });
+      },
+      () => resolve(null),
+      { enableHighAccuracy: false, timeout: 5000, maximumAge: 600000 }
+    );
+  });
+}
+
 async function runTask() {
   const task = questionInput.value.trim();
   if (!task) return;
@@ -54,7 +72,7 @@ async function runTask() {
     const response = await fetch("/api/task", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ task })
+      body: JSON.stringify({ task, location: await getBrowserLocation() })
     });
 
     const data = await response.json();

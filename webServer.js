@@ -71,7 +71,7 @@ app.post("/api/task", async (req, res) => {
       res.json({
         ok: true,
         intent,
-        answer: await answerGeneralQuestion(task)
+        answer: await answerGeneralQuestion(task, req.body?.location || null)
       });
       return;
     }

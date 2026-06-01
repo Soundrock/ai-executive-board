@@ -1,19 +1,20 @@
 import fs from "fs";
 
 const settingsFile = "data/user-settings.json";
-const fallbackLocation = "台北";
 
 function readDefaultLocation() {
   try {
-    if (!fs.existsSync(settingsFile)) return fallbackLocation;
+    if (!fs.existsSync(settingsFile)) return null;
     const data = JSON.parse(fs.readFileSync(settingsFile, "utf8"));
-    return data.defaultLocation || fallbackLocation;
+    return data.defaultLocation || null;
   } catch {
-    return fallbackLocation;
+    return null;
   }
 }
 
-function detectLocation(question = "") {
+function detectLocation(question = "", userLocation = null) {
+  if (userLocation?.city) return userLocation.city;
+
   const locations = [
     "台北", "新北", "桃園", "台中", "台南", "高雄", "基隆", "新竹",
     "宜蘭", "花蓮", "台東", "嘉義", "彰化", "南投", "苗栗", "屏東"
@@ -76,7 +77,7 @@ function formatCurrentWeather(weather) {
 濕度：約 ${current.humidity}%
 降雨機率：約 ${today.hourly?.[4]?.chanceofrain || today.hourly?.[0]?.chanceofrain || "N/A"}%
 
-建議：天氣偏濕，出門可帶雨具。`;
+建議：如果外出，先看是否需要雨具。`;
 }
 
 function formatForecast(weather) {
@@ -95,28 +96,34 @@ ${lines.join("\n")}
 建議：如果降雨機率偏高，出門帶雨具。`;
 }
 
-export async function answerGeneralQuestion(question = "") {
+export async function answerGeneralQuestion(question = "", userLocation = null) {
   if (isLocationSettingQuestion(question)) {
-    return `目前可以先把你的預設位置存在系統設定中。
+    return `目前可使用瀏覽器定位。
 
-現在系統預設位置是：${readDefaultLocation()}
+之後你第一次使用天氣或位置功能時，瀏覽器會詢問是否允許位置權限。
 
-下一步我會加入指令：
-設定我的位置為台北
-
-之後你問天氣時，就會自動用這個位置。`;
+如果允許，系統會依照你當下所在位置查詢。
+如果不允許，請直接輸入城市，例如：東京天氣如何？`;
   }
 
   if (isLocationQuestion(question)) {
-    return `我目前不能直接讀取你電腦的精確位置。
+    if (userLocation?.city) {
+      return `我目前讀到的位置是：${userLocation.city}
 
-目前系統預設位置是：${readDefaultLocation()}
+如果這不正確，你可以直接輸入城市名稱，例如：東京天氣如何？`;
+    }
 
-之後可以加入「設定我的位置為台北」功能，讓系統記住你的常用位置。`;
+    return `我目前還沒有取得你的電腦位置。
+
+請允許瀏覽器位置權限，或直接輸入城市名稱。`;
   }
 
   if (isWeatherQuestion(question)) {
-    const location = detectLocation(question);
+    const location = detectLocation(question, userLocation);
+
+    if (!location) {
+      return "請告訴我城市，或允許瀏覽器讀取位置。例如：台北天氣如何？";
+    }
 
     try {
       const weather = await getWeather(location);
