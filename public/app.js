@@ -262,52 +262,66 @@ function addFiles(files) {
   renderInputFiles();
 }
 
+
 function setupFileButtons() {
-  const attachmentButton = [...document.querySelectorAll(".composer-actions button")].find(b => b.textContent.trim() === "附件");
-  const imageButton = [...document.querySelectorAll(".composer-actions button")].find(b => b.textContent.trim() === "圖片");
+  const actions = document.querySelector(".composer-actions");
+  const composer = document.querySelector(".composer");
 
-  const fileInput = document.createElement("input");
-  fileInput.type = "file";
-  fileInput.multiple = true;
-  fileInput.accept = ".png,.jpg,.jpeg,.webp,.gif,.bmp,.tiff,.pdf,.doc,.docx,.xls,.xlsx,.csv,.ppt,.pptx,.txt,.eml,.msg,.zip,image/*";
-  fileInput.style.display = "none";
+  if (!actions || !composer) return;
 
-  const imageInput = document.createElement("input");
-  imageInput.type = "file";
-  imageInput.accept = "image/*,.png,.jpg,.jpeg,.webp,.gif,.bmp,.tiff";
-  imageInput.multiple = true;
-  imageInput.style.display = "none";
+  let fileInput = document.getElementById("real-file-input");
+  let imageInput = document.getElementById("real-image-input");
 
-  document.body.appendChild(fileInput);
-  document.body.appendChild(imageInput);
-
-  if (attachmentButton) {
-    attachmentButton.type = "button";
-    attachmentButton.addEventListener("click", event => {
-      event.preventDefault();
-      event.stopPropagation();
-      fileInput.click();
-    });
+  if (!fileInput) {
+    fileInput = document.createElement("input");
+    fileInput.id = "real-file-input";
+    fileInput.type = "file";
+    fileInput.multiple = true;
+    fileInput.accept = ".png,.jpg,.jpeg,.webp,.gif,.bmp,.tiff,.pdf,.doc,.docx,.xls,.xlsx,.csv,.ppt,.pptx,.txt,.eml,.msg,.zip,image/*";
+    fileInput.style.display = "none";
+    document.body.appendChild(fileInput);
   }
 
-  if (imageButton) {
-    imageButton.type = "button";
-    imageButton.addEventListener("click", event => {
-      event.preventDefault();
-      event.stopPropagation();
-      imageInput.click();
-    });
+  if (!imageInput) {
+    imageInput = document.createElement("input");
+    imageInput.id = "real-image-input";
+    imageInput.type = "file";
+    imageInput.accept = "image/*,.png,.jpg,.jpeg,.webp,.gif,.bmp,.tiff";
+    imageInput.multiple = true;
+    imageInput.style.display = "none";
+    document.body.appendChild(imageInput);
   }
 
-  fileInput.addEventListener("change", () => addFiles(fileInput.files));
-  imageInput.addEventListener("change", () => addFiles(imageInput.files));
+  document.querySelectorAll(".upload-action-btn").forEach(btn => btn.remove());
+
+  const imageButton = document.createElement("button");
+  imageButton.type = "button";
+  imageButton.className = "upload-action-btn";
+  imageButton.textContent = "圖片";
+  imageButton.onclick = event => {
+    event.preventDefault();
+    imageInput.click();
+  };
+
+  const fileButton = document.createElement("button");
+  fileButton.type = "button";
+  fileButton.className = "upload-action-btn";
+  fileButton.textContent = "附件";
+  fileButton.onclick = event => {
+    event.preventDefault();
+    fileInput.click();
+  };
+
+  actions.insertBefore(imageButton, actions.firstChild);
+  actions.insertBefore(fileButton, actions.firstChild);
+
+  fileInput.onchange = () => addFiles(fileInput.files);
+  imageInput.onchange = () => addFiles(imageInput.files);
 
   questionInput.addEventListener("paste", event => {
     const files = event.clipboardData?.files;
     if (files && files.length) addFiles(files);
   });
-
-  const composer = document.querySelector(".composer");
 
   composer.addEventListener("dragover", event => {
     event.preventDefault();
@@ -324,6 +338,7 @@ function setupFileButtons() {
     addFiles(event.dataTransfer.files);
   });
 }
+
 
 async function showLatestReport() {
   addMessage("ai", "<p>正在讀取最新報告...</p>");
