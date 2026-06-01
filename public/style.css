@@ -332,3 +332,60 @@ button.send {
   color: #667085;
   line-height: 1.5;
 }
+
+.user-message {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.user-message .bubble {
+  max-width: 78%;
+  background: #ede9fe;
+  color: #111827;
+  border-radius: 18px 18px 4px 18px;
+  padding: 14px 16px;
+}
+
+.ai-message {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.ai-message .bubble {
+  max-width: 86%;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px 18px 18px 4px;
+  padding: 16px;
+}
+
+.file-preview-list,
+#input-file-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.file-preview {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 8px;
+  background: #ffffff;
+  font-size: 13px;
+}
+
+.file-preview img {
+  width: 54px;
+  height: 54px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.composer.drag-over {
+  border-color: #7c3aed;
+  background: #f5f3ff;
+}
