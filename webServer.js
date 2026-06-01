@@ -14,6 +14,15 @@ const port = process.env.PORT || 3000;
 app.use(express.json({ limit: "20mb" }));
 app.use(express.static(path.join(__dirname, "public")));
 
+
+function detectProject(input) {
+  const t = String(input || "").toLowerCase();
+  if (t.includes("erp") || input.includes("導覽機") || input.includes("租賃")) return "erp";
+  if (t.includes("image") || input.includes("圖像") || input.includes("圖片") || input.includes("魔術師")) return "image";
+  if (input.includes("智策") || input.includes("決策中心") || t.includes("command")) return "command";
+  return "command";
+}
+
 function runNodeScript(args) {
   return new Promise((resolve, reject) => {
     execFile("node", args, { cwd: __dirname, timeout: 300000 }, (error, stdout, stderr) => {
@@ -34,8 +43,15 @@ app.post("/api/task", async (req, res) => {
       return;
     }
 
-    const output = await runNodeScript(["src/orchestrator/commandCenterCli.js", task]);
-    res.json({ ok: true, output });
+    const output = await runNodeScript(["src/orchestrator/runAndSaveProjectTask.js", detectProject(task), task]);
+    const parsed = JSON.parse(output);
+    res.json({
+      ok: true,
+      output,
+      answer: parsed.answer,
+      outputFile: parsed.outputFile,
+      projectKey: parsed.projectKey
+    });
   } catch (error) {
     res.status(500).json({ ok: false, error: error.message });
   }

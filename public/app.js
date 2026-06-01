@@ -62,7 +62,7 @@ async function runTask() {
     if (!data.ok) throw new Error(data.error);
 
     loading.remove();
-    const answer = extractAnswer(data.output);
+    const answer = data.answer || extractAnswer(data.output);
     addMessage("ai", `<strong>任務完成</strong><pre>${escapeHtml(answer)}</pre>`);
   } catch (error) {
     loading.remove();
