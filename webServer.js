@@ -13,6 +13,9 @@ import { getAiStatus } from "./src/ai/aiStatus.js";
 import { runRealMultiAiDiscussion } from "./src/multi-ai/realMultiAiDiscussion.js";
 import { getUsageSummary } from "./src/usage/usageTracker.js";
 import { getModelOptions } from "./src/models/modelOptions.js";
+import { buildFileContext } from "./src/files/fileIntelligence.js";
+import { buildLocationContext } from "./src/location/locationEngine.js";
+import { getPages } from "./src/pages/pageRegistry.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -100,6 +103,9 @@ app.get("/api/uploads", (req, res) => {
 app.post("/api/task", async (req, res) => {
   try {
     const task = req.body?.task || "";
+    const fileContext = buildFileContext(req.body?.files || []);
+    const locationContext = buildLocationContext(req.body?.location || null);
+    const runtimeContext = [fileContext, locationContext].filter(Boolean).join("\n\n");
     if (!task.trim()) {
       res.status(400).json({ ok: false, error: "Missing task" });
       return;
@@ -123,7 +129,7 @@ app.post("/api/task", async (req, res) => {
     }
 
     if (intent === "direct-answer") {
-      const multiAi = await runRealMultiAiDiscussion(task);
+      const multiAi = await runRealMultiAiDiscussion(task, runtimeContext);
       res.json({
         ok: true,
         intent,
@@ -182,6 +188,13 @@ app.get("/api/usage", (req, res) => {
   res.json({
     ok: true,
     usage: getUsageSummary()
+  });
+});
+
+app.get("/api/pages", (req, res) => {
+  res.json({
+    ok: true,
+    pages: getPages()
   });
 });
 

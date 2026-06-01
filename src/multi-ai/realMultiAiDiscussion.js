@@ -53,6 +53,12 @@ export async function runRealMultiAiDiscussion(question, context = "") {
 上下文：
 ${context || "無"}
 
+如果上下文中有上傳檔案：
+1. 不要再要求使用者重新上傳
+2. 必須承認已收到檔案
+3. 如果目前只能看到檔案 metadata，要明確說「目前已收到檔案，但圖片實際修改/全文解析尚未接上」
+4. 如果使用者要求改圖，請說下一步需要接入 Image Agent，而不是假裝已經改好
+
 使用者問題：
 ${question}
 `;

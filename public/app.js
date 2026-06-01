@@ -234,6 +234,7 @@ async function runTask() {
     const answer = data.answer || data.output || "沒有取得答案";
     addMessage("ai", `${renderMeta(data)}<pre>${escapeHtml(answer)}</pre>${renderAiResponses(data)}`);
     refreshUsage();
+  refreshPages();
   } catch (error) {
     loading.remove();
     addMessage("ai", `<p>${escapeHtml(error.message)}</p>`);
@@ -429,8 +430,33 @@ async function initApp() {
   await refreshModelOptions();
   refreshAiStatus();
   refreshUsage();
+  refreshPages();
   setInterval(refreshAiStatus, 30000);
   setInterval(refreshUsage, 30000);
 }
 
 initApp();
+
+
+async function refreshPages() {
+  try {
+    const response = await fetch("/api/pages");
+    const data = await response.json();
+    if (!data.ok) return;
+
+    const buttons = [...document.querySelectorAll("nav button")];
+
+    buttons.forEach(button => {
+      button.type = "button";
+      button.addEventListener("click", () => {
+        buttons.forEach(b => b.classList.remove("active"));
+        button.classList.add("active");
+
+        const name = button.textContent.trim();
+        if (name !== "主頁") {
+          addMessage("ai", `<p>${escapeHtml(name)} 頁面已建立入口。完整功能會在下一階段接上。</p>`);
+        }
+      });
+    });
+  } catch {}
+}
