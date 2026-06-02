@@ -1,10 +1,14 @@
 # AI Executive Board
 
+![AI Executive Board Banner](assets/banner.png)
+
 Don't Ask One AI. Ask An Entire AI Board.
 
 AI Executive Board is an open-source multi-agent AI consensus platform designed to help people get better answers, make better decisions, and complete work faster by combining the intelligence of multiple AI systems.
 
-## Vision
+## The AI Consensus Platform
+
+![AI Executive Board Logo](assets/logo.png)
 
 Most people do not need another AI chatbot.
 
@@ -20,11 +24,13 @@ Instead of asking one AI and receiving one opinion, users can ask one question a
 
 From AI Answers to AI Consensus.
 
-The project is built around one simple belief:
-
 The future of AI is not one model replacing every other model.
 
 The future is multiple AI systems working together.
+
+## Architecture
+
+![AI Executive Board Architecture](assets/architecture.png)
 
 ## What This Project Solves
 
