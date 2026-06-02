@@ -1,18 +1,69 @@
-Vincent AI Command Center v1
+# AI Executive Board
 
-功能：
-使用者輸入一個問題後，系統會同時詢問 OpenAI、Gemini、DeepSeek，然後由 OpenAI 做總評。
+Don't Ask One AI. Ask An Entire AI Board.
 
-安裝：
-npm install
+AI Executive Board is an open-source multi-agent AI consensus platform designed to help people get better answers, make better decisions, and complete work faster by combining the intelligence of multiple AI systems.
 
-設定 API Key：
-1. 複製 .env.example 成 .env
-2. 在 .env 填入 OPENAI_API_KEY、GEMINI_API_KEY、DEEPSEEK_API_KEY
+## Vision
 
-執行：
-npm start
+Most people do not need another AI chatbot.
 
-注意：
-.env 不要上傳 GitHub。
-API Key 不要公開。
+They need trusted guidance.
+
+Today, users are surrounded by many AI tools such as ChatGPT, Gemini, Claude, DeepSeek, Perplexity, Copilot, and others. Each AI has its own strengths, limitations, blind spots, and reasoning style.
+
+AI Executive Board solves this problem by turning multiple AI systems into a collaborative AI board.
+
+Instead of asking one AI and receiving one opinion, users can ask one question and receive a combined, reviewed, and consensus-based recommendation from multiple AI perspectives.
+
+## Core Idea
+
+From AI Answers to AI Consensus.
+
+The project is built around one simple belief:
+
+The future of AI is not one model replacing every other model.
+
+The future is multiple AI systems working together.
+
+## What This Project Solves
+
+AI Executive Board helps solve common problems faced by everyday users:
+
+- Users do not know which AI tool to use
+- Users do not know how to write effective prompts
+- Users receive conflicting answers from different AI systems
+- Users do not know which answer to trust
+- Users waste time switching between AI platforms
+- Users need practical outputs, not just conversations
+
+## Key Features
+
+- Multi-agent AI discussion
+- AI response comparison
+- Final judge and recommendation layer
+- File upload context
+- Location context
+- Sidebar workspace structure
+- Task-oriented AI workflow foundation
+- Extensible architecture for future AI tools and automation
+
+## Target Users
+
+This project is designed for non-technical users, creators, students, professionals, small businesses, and open-source builders who want to use advanced AI without needing to understand models, APIs, prompts, or agent frameworks.
+
+## Project Status
+
+This project is currently in early active development.
+
+Some features are experimental. The current goal is to improve stability, documentation, testing, agent orchestration, and contributor readiness.
+
+## Open Source Mission
+
+AI Executive Board aims to make multi-agent AI collaboration accessible to everyone, not only engineers.
+
+The mission is to help users move from single AI opinions to collective AI intelligence.
+
+## License
+
+MIT License.
