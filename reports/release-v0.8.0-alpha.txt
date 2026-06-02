@@ -1,0 +1,21 @@
+AI Executive Board v0.8.0-alpha
+
+Don't Ask One AI. Ask An Entire AI Board.
+
+This alpha release prepares AI Executive Board as an open-source multi-agent AI consensus platform.
+
+Highlights:
+- Multi-agent discussion foundation
+- OpenAI, Gemini, and DeepSeek agent structure
+- Final judge and recommendation layer
+- File upload context foundation
+- Location context foundation
+- Sidebar workspace structure
+- Open-source README, ROADMAP, CONTRIBUTING, and MIT LICENSE
+- Secret protection through .gitignore
+
+Status:
+Early active development / Alpha
+
+Positioning:
+AI Executive Board - The AI Consensus Platform
