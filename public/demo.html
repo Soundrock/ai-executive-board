@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Executive Board - Boardroom Demo</title>
+  <link rel="stylesheet" href="../assets/command-center-demo.css">
+  <link rel="icon" href="../assets/logo.png" type="image/png">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <img src="../assets/logo.png" alt="AI Executive Board Logo">
+      <div>
+        <strong>AI Executive Board</strong>
+        <span>AI Consensus Platform</span>
+      </div>
+    </div>
+
+    <nav class="side-nav">
+      <a class="active" href="#">Home</a>
+      <a href="#">History</a>
+      <a href="#">My Files</a>
+      <a href="#">Favorites</a>
+      <a href="#">Agent Management</a>
+      <a href="#">Settings</a>
+    </nav>
+
+    <div class="usage-card">
+      <h3>Usage & Cost</h3>
+      <p>Total Requests</p>
+      <strong>12</strong>
+      <p>Estimated Cost</p>
+      <strong>$0.42</strong>
+      <small>Demo only. Real usage tracking will connect later.</small>
+    </div>
+
+    <div class="user-card">
+      <div class="avatar">V</div>
+      <div>
+        <strong>Vincent</strong>
+        <span>Pro</span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main boardroom-main">
+    <header class="board-header">
+      <div>
+        <h1>Boardroom Discussion <span>Live</span></h1>
+        <p>Multi-Agent Discussion in Progress</p>
+      </div>
+      <a class="ghost-btn" href="../index.html">Back to Website ↗</a>
+    </header>
+
+    <section class="conversation">
+      <article class="message user-message">
+        <div class="avatar">V</div>
+        <div class="message-body">
+          <div class="message-meta">
+            <strong>You</strong>
+            <time>10:15 AM</time>
+          </div>
+          <p>Should we build the full AI Router first, or focus on stabilizing the Demo UI?</p>
+        </div>
+      </article>
+
+      <article class="message chair-message">
+        <div class="ai-avatar chair">◎</div>
+        <div class="message-body">
+          <div class="message-meta">
+            <strong>Chairperson AI <span>Host</span></strong>
+            <time>10:15 AM</time>
+          </div>
+          <p>Let's start the board discussion. Please share your perspectives based on product value, implementation risk, and CP value.</p>
+        </div>
+      </article>
+
+      <article class="message">
+        <div class="ai-avatar gemini">✦</div>
+        <div class="message-body">
+          <div class="message-meta">
+            <strong>Gemini 2.5 Flash</strong>
+            <time>10:16 AM</time>
+          </div>
+          <p>From a user adoption standpoint, stabilizing the Demo UI first will help validate the value and gather real feedback earlier.</p>
+        </div>
+      </article>
+
+      <article class="message">
+        <div class="ai-avatar deepseek">◆</div>
+        <div class="message-body">
+          <div class="message-meta">
+            <strong>DeepSeek Chat</strong>
+            <time>10:16 AM</time>
+          </div>
+          <p>I agree. The highest CP value right now is to deliver a working demo. Premature backend routing increases complexity and delays iteration.</p>
+        </div>
+      </article>
+
+      <article class="message">
+        <div class="ai-avatar claude">AI</div>
+        <div class="message-body">
+          <div class="message-meta">
+            <strong>Claude 3.5</strong>
+            <time>10:17 AM</time>
+          </div>
+          <p>Building UI and workflow stability first reduces rework. We can design the router interface in parallel without full implementation.</p>
+        </div>
+      </article>
+
+      <article class="message chair-message">
+        <div class="ai-avatar chair">◎</div>
+        <div class="message-body">
+          <div class="message-meta">
+            <strong>Chairperson AI <span>Host</span></strong>
+            <time>10:17 AM</time>
+          </div>
+          <p>Thank you all. I will synthesize the discussion and generate the final recommendation.</p>
+        </div>
+      </article>
+
+      <div class="typing-row">
+        <span>◎ Chairperson AI is typing...</span>
+        <i></i><i></i><i></i>
+      </div>
+    </section>
+
+    <section class="composer">
+      <textarea placeholder="Share your thoughts, ask a question, or drag and drop files here..."></textarea>
+      <div class="composer-actions">
+        <button>Attach</button>
+        <button>Image</button>
+        <button>Voice</button>
+        <button>Report</button>
+        <button>Location</button>
+        <button class="primary">Send</button>
+      </div>
+    </section>
+  </main>
+
+  <aside class="control-panel">
+    <section>
+      <h3>AI Control Center</h3>
+      <p class="section-label">Chairperson AI</p>
+      <div class="model-card selected">
+        <span class="status on"></span>
+        <strong>OpenAI (GPT-5.5)</strong>
+        <small>Strategic Facilitator</small>
+      </div>
+      <div class="model-card">
+        <span class="status"></span>
+        <strong>Gemini 2.5 Flash</strong>
+        <small>Research & Insights</small>
+      </div>
+      <div class="model-card">
+        <span class="status on"></span>
+        <strong>DeepSeek Chat</strong>
+        <small>Execution & Efficiency</small>
+      </div>
+      <div class="model-card">
+        <span class="status"></span>
+        <strong>Claude 3.5</strong>
+        <small>Risk & Safety</small>
+      </div>
+    </section>
+
+    <section>
+      <h3>Participating AI</h3>
+      <label><input type="checkbox" checked> Gemini 2.5 Flash</label>
+      <label><input type="checkbox" checked> DeepSeek Chat</label>
+      <label><input type="checkbox" checked> Claude 3.5</label>
+      <label><input type="checkbox"> Perplexity AI</label>
+    </section>
+
+    <section>
+      <h3>Discussion Settings</h3>
+      <label>Mode</label>
+      <select>
+        <option>Standard Mode</option>
+        <option>Quick Mode</option>
+        <option>Deep Research</option>
+      </select>
+      <label>View</label>
+      <select>
+        <option>Chat View</option>
+        <option>Board View</option>
+        <option>Comparison View</option>
+      </select>
+    </section>
+
+    <section>
+      <h3>Output Preferences</h3>
+      <label>Output Mode</label>
+      <select>
+        <option>AI-Synthesized Summary</option>
+        <option>Show All Responses</option>
+        <option>Comparison Table</option>
+        <option>AI Scoring</option>
+      </select>
+      <label>Detail Level</label>
+      <select>
+        <option>Standard</option>
+        <option>Brief</option>
+        <option>Detailed</option>
+      </select>
+    </section>
+  </aside>
+
+  <script src="../assets/command-center-demo.js"></script>
+</body>
+</html>
